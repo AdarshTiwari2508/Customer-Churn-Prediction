@@ -4,6 +4,8 @@ import joblib
 import shap
 import json
 import matplotlib.pyplot as plt
+from pathlib import Path
+
 
 # ── Page config ──────────────────────────────────────────────
 st.set_page_config(
@@ -13,12 +15,20 @@ st.set_page_config(
 )
 
 # ── Load model & artifacts ────────────────────────────────────
+from pathlib import Path
+import joblib
+import json
+
 @st.cache_resource
 def load_model():
-    model     = joblib.load('../models/churn_model.pkl')
-    explainer = joblib.load('../models/shap_explainer.pkl')
-    with open('../models/feature_names.json') as f:
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
+    model = joblib.load(BASE_DIR / "models" / "churn_model.pkl")
+    explainer = joblib.load(BASE_DIR / "models" / "shap_explainer.pkl")
+
+    with open(BASE_DIR / "models" / "feature_names.json") as f:
         features = json.load(f)
+
     return model, explainer, features
 
 model, explainer, features = load_model()
